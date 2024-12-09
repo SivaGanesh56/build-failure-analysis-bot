@@ -1,0 +1,28 @@
+version: 0.2
+phases:
+  install:
+    runtime-versions:
+      nodejs: 18
+    commands:
+      - echo "Installing dependencies..."
+      - yarn install
+  pre_build:
+    commands:
+      - echo "Starting pre-build phase"
+  build:
+    commands:
+      - echo "Starting build phase"
+      - yarn run build
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - "**/*"
+  base-directory: out
+
+cache:
+  paths:
+    - "node_modules/**/*"
+    - ".next/cache/**/*"
