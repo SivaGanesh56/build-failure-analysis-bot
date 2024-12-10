@@ -3,6 +3,7 @@ import { MemoryVectorStore } from "langchain/vectorstores/memory";
 import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { GithubRepoLoader } from "@langchain/community/document_loaders/web/github";
+import { sendNotificationToTeams } from "./utils.js";
 
 const GITHUB_URL = "https://github.com/Gaurav-Dash/basic-nextjs-app";
 
@@ -145,11 +146,12 @@ You will receive error logs containing details about the failure, and the contex
     response = await getCompletion(messages);
 
     if (response.choices[0].finish_reason === "stop") {
-      console.log(
-        `Answer: ${response.choices[0].message.content}\n\nSources: ${results
-          .map((r) => r.metadata.source)
-          .join(", ")}`
-      );
+      const content = `${
+        response.choices[0].message.content
+      }\n\nSources: ${results.map((r) => r.metadata.source).join(", ")}\n\n`;
+
+      await sendNotificationToTeams(content);
+
       break;
     } else if (response.choices[0].finish_reason === "function_call") {
       const fnName = response.choices[0].message.function_call.name;
