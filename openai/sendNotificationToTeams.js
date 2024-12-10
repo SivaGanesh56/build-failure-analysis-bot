@@ -9,7 +9,7 @@ export const sendNotificationToTeams = async (content) => {
       text: `${content}`,
     };
 
-    const response = await axios.post(webhookUrl, message);
+    await axios.post(webhookUrl, message);
     console.log("Notification sent to Teams:");
   } catch (error) {
     console.error("Error sending notification to Teams:", error);

@@ -2,7 +2,7 @@ import { INFRA_ERROR_ENV_VARIABLE } from "./errors.js";
 import { ASSISTANT_PROMPT_TEXT } from "./constants.js";
 import { loadStore } from "./loadStore.js";
 import { getCompletion } from "./helpers.js";
-import { sendNotificationToTeams } from "./sendNotificationToTeams";
+import { sendNotificationToTeams } from "./sendNotificationToTeams.js";
 
 const errorLogs = INFRA_ERROR_ENV_VARIABLE;
 
