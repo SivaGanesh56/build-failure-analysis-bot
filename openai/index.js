@@ -8,7 +8,12 @@ const errorLogs = INFRA_ERROR_ENV_VARIABLE;
 const query = async () => {
   const store = await loadStore();
 
-  const results = await store.similaritySearch(errorLogs, 2);
+  // const results = await store.similaritySearch(errorLogs, 2);
+
+  const results = store.memoryVectors.map((item) => ({
+    pageContent: item.content,
+    metadata: item.metadata,
+  }));
 
   const messages = [
     {

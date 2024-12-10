@@ -17,8 +17,8 @@ Error Categories:
   - For CMS errors, do not suggest code fixes. Instead, recommend investigating the CMS entries for missing or invalid fields.
   - Always invoke the \`cmsErrorHandler\` function (passed as part of \`openai.chat.completions.create\`) for handling CMS-related errors. 
 - For Code Errors, suggest potential fixes or checks related to the codebase.
-- For Environment Errors, identify missing or invalid environment variables and suggest verifying the environment configuration.
-- For Infrastructure Errors, point out possible issues such as insufficient build resources or deployment configuration.
+- For Environment Errors, identify missing or invalid environment variables and suggest verifying the environment configuration and provide sample env file.
+- For Infrastructure Errors, point out possible issues such as insufficient build resources or deployment configuration and provide steps to fix it.
 - For Other Errors, analyze and provide a high-level recommendation for further investigation.
 
 ### Context Example:
