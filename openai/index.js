@@ -30,7 +30,14 @@ const docsFromGithub = () => {
     unknown: "warn",
     accessToken: process.env.GITHUB_ACCESS_TOKEN,
     maxConcurrency: 1, // Defaults to 2
-    ignorePaths: ["*.md", "*.json", "*.test.*", "*.txt", "yarn.lock"],
+    ignorePaths: [
+      "*.md",
+      "*.json",
+      "*.test.*",
+      "*.txt",
+      "yarn.lock",
+      "openai/*",
+    ],
   });
 
   return loader.load();
