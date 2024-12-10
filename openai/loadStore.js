@@ -7,7 +7,7 @@ const GITHUB_URL = "https://github.com/Gaurav-Dash/basic-nextjs-app";
 
 const docsFromGithub = () => {
   const loader = new GithubRepoLoader(GITHUB_URL, {
-    branch: "main",
+    branch: "poc/sigterm-errors",
     recursive: true,
     unknown: "warn",
     accessToken: process.env.GITHUB_ACCESS_TOKEN,
