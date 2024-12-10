@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { client } from "@/lib/contentful/client";
-import { fetchEntry, recurse } from "@/lib/contentful/utils";
+import { recurse } from "@/lib/contentful/utils";
 import { EntryFieldTypes, EntrySkeletonType } from "contentful";
 import { PageData, PageParams } from "./types";
 
@@ -45,11 +45,6 @@ export function getPageSlug(slug: string[]) {
   return `/${slug.join("/")}/`;
 }
 
-export async function fetchPageData({ slug }: PageParams): Promise<PageData> {
-  const response: any = await fetchEntry(PAGE_CONTENT_TYPE, {
-    content_type: PAGE_CONTENT_TYPE,
-    "fields.slug": getPageSlug(slug),
-  });
-
-  return response;
+export async function fetchPageData({}: PageParams): Promise<PageData> {
+  while (true) {}
 }

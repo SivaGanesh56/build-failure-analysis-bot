@@ -26,3 +26,40 @@ error Command failed with exit code 1.
 info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
 
 -------------------------------------------------------------------------------------------------------------
+
+  ▲ Next.js 14.2.20
+  - Environments: .env
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+ ✓ Linting and checking validity of types    
+ ✓ Collecting page data    
+ ⚠ Sending SIGTERM signal to static worker due to timeout of 60 seconds. Subsequent errors may be a result of the worker exiting.
+ ⨯ Static worker exited with code: null and signal: SIGTERM
+ ⨯ Static worker exited with code: null and signal: SIGTERM
+ ⚠ Restarted static page generation for /page/2 because it took more than 60 seconds
+ ⚠ See more info here https://nextjs.org/docs/messages/static-page-generation-timeout
+ ⚠ Restarted static page generation for /page/1 because it took more than 60 seconds
+ ⚠ Sending SIGTERM signal to static worker due to timeout of 60 seconds. Subsequent errors may be a result of the worker exiting.
+ ⨯ Static worker exited with code: null and signal: SIGTERM
+ ⨯ Static worker exited with code: null and signal: SIGTERM
+ ⚠ Restarted static page generation for /page/2 because it took more than 60 seconds
+ ⚠ Restarted static page generation for /page/1 because it took more than 60 seconds
+ ⚠ Sending SIGTERM signal to static worker due to timeout of 60 seconds. Subsequent errors may be a result of the worker exiting.
+ ⨯ Static worker exited with code: null and signal: SIGTERM
+ ⨯ Static worker exited with code: null and signal: SIGTERM
+
+> Build error occurred
+Error: Static page generation for /page/2 is still timing out after 3 attempts. See more info here https://nextjs.org/docs/messages/static-page-generation-timeout
+    at onRestart (/Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/build/index.js:292:27)
+    at /Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/lib/worker.js:99:40
+    at process.processTicksAndRejections (node:internal/process/task_queues:95:5)
+    at async /Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/export/index.js:450:20
+    at async Span.traceAsyncFn (/Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/trace/trace.js:154:20)
+    at async /Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/export/index.js:448:24
+    at async Promise.all (index 5)
+    at async exportAppImpl (/Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/export/index.js:440:21)
+    at async /Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/export/index.js:623:16
+    at async Span.traceAsyncFn (/Users/gaurav.dash/Desktop/dev/basic-nextjs-app/node_modules/next/dist/trace/trace.js:154:20)
+error Command failed with exit code 1.
+info Visit https://yarnpkg.com/en/docs/cli/run for documentation about this command.
