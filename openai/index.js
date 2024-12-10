@@ -2,6 +2,7 @@ import { INFRA_ERROR_ENV_VARIABLE } from "./errors.js";
 import { ASSISTANT_PROMPT_TEXT } from "./constants.js";
 import { loadStore } from "./loadStore.js";
 import { getCompletion } from "./helpers.js";
+import { sendNotificationToTeams } from "./sendNotificationToTeams";
 
 const errorLogs = INFRA_ERROR_ENV_VARIABLE;
 
@@ -35,11 +36,12 @@ const query = async () => {
     response = await getCompletion(messages);
 
     if (response.choices[0].finish_reason === "stop") {
-      console.log(
-        `Answer: ${response.choices[0].message.content}\n\nSources: ${results
-          .map((r) => r.metadata.source)
-          .join(", ")}`
-      );
+      const content = `${
+        response.choices[0].message.content
+      }\n\nSources: ${results.map((r) => r.metadata.source).join(", ")}\n\n`;
+
+      await sendNotificationToTeams(content);
+
       break;
     } else if (response.choices[0].finish_reason === "function_call") {
       const fnName = response.choices[0].message.function_call.name;
