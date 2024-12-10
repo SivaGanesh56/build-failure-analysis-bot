@@ -3,7 +3,10 @@ import { fetchPageData, fetchPages } from "./data";
 import Image from "next/image";
 
 export async function generateStaticParams() {
-  return fetchPages();
+  const pages = await fetchPages();
+  return pages.map((page) => ({
+    id: page.slug,
+  }));
 }
 
 const Page = async ({ params }: { params: { slug: string[] } }) => {
