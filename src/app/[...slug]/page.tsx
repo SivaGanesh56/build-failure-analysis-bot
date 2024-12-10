@@ -1,7 +1,7 @@
 import React from "react";
 import { fetchPageData, fetchPages } from "./data";
 import Image from "next/image";
-import WidgetRenderer from "../components/WidgetRenderer";
+import WidgetRenderer from "../../components/WidgetRenderer";
 
 export async function generateStaticParams() {
   const pages = await fetchPages();
