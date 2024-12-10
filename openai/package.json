@@ -16,6 +16,7 @@
     "@langchain/groq": "^0.1.2",
     "@langchain/openai": "^0.3.14",
     "advanced-calculator": "^1.1.1",
+    "contentful": "^11.3.1",
     "dotenv": "^16.4.7",
     "ignore": "^5.3.2",
     "langchain": "^0.3.6",

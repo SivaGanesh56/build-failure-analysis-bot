@@ -1,7 +1,7 @@
 import { CODE_ERROR_NESTED_ERROR } from "./errors.js";
 import { ASSISTANT_PROMPT_TEXT } from "./constants.js";
 import { loadStore } from "./loadStore.js";
-import { getCompletion } from "./helpers.js";
+import { functions, getCompletion } from "./helpers.js";
 // import { sendNotificationToTeams } from "./sendNotificationToTeams.js";
 
 const errorLogs = CODE_ERROR_NESTED_ERROR;
