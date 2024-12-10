@@ -1,0 +1,17 @@
+  Creating an optimized production build ...
+ ✓ Compiled successfully
+   Linting and checking validity of types  ..Failed to compile.
+
+./src/app/[...slug]/page.tsx:6:23
+Type error: Property 'map' does not exist on type 'Promise<{ slug: string[]; }[]>'.
+
+  4 |
+  5 | export async function generateStaticParams() {
+> 6 |   return fetchPages().map((page) => ({
+    |                       ^
+  7 |     slug: page.slug.split("/"),
+  8 |   }));
+  9 | }
+
+
+  -------------------------------------------------------------------------------------------------------------
