@@ -1,7 +1,7 @@
 import { ASSISTANT_PROMPT_TEXT } from "./constants.js";
 import { loadStore } from "./loadStore.js";
 import { functions, getCompletion } from "./helpers.js";
-// import { sendNotificationToTeams } from "./sendNotificationToTeams.js";
+import { sendNotificationToTeams } from "./sendNotificationToTeams.js";
 
 export const analyzeErrorLogs = async (errorLogs) => {
   const store = await loadStore();
@@ -37,9 +37,9 @@ export const analyzeErrorLogs = async (errorLogs) => {
         response.choices[0].message.content
       }\n\nSources: ${results.map((r) => r.metadata.source).join(", ")}\n\n`;
 
-      console.log(content);
+      // console.log(content);
 
-      // await sendNotificationToTeams(content);
+      await sendNotificationToTeams(content);
 
       break;
     } else if (response.choices[0].finish_reason === "function_call") {
