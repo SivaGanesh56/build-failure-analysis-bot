@@ -6,7 +6,7 @@ import WidgetRenderer from "../../components/WidgetRenderer";
 export async function generateStaticParams() {
   const pages = await fetchPages();
   return pages.map((page) => ({
-    id: page.slug,
+    slug: page.slug,
   }));
 }
 
