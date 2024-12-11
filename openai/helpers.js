@@ -22,9 +22,26 @@ export const functions = {
   },
 };
 
-export const getCompletion = async (messages) => {
+export const getCompletion = async (messages, retries = 2) => {
+  retries--;
+  if (retries <= 0) return getCMSCompletion(messages);
   const response = await openai.chat.completions.create({
-    model: "gpt-4-turbo",
+    model: "gpt-4o",
+    messages,
+    temperature: 0,
+  });
+  messages.push({
+    role: "user",
+    content: `Recheck all the problems provided with ${response.data} with the code contexts, their surroundings and backtracking and verify there are not any other problems. Finaly give best likely possible options of the error occurances, their locations and solution.
+     `,
+  });
+
+  return getCompletion(messages, retries);
+};
+
+export const getCMSCompletion = async (messages) => {
+  const response = await openai.chat.completions.create({
+    model: "gpt-4o",
     messages,
     functions: [
       {

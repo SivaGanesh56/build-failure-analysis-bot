@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { analyzeErrorLogs } from "./analyzeError.js";
-// import { INFRA_ERROR_OUT_OF_MEMORY } from "./errors.js";
 
 const app = express();
 
