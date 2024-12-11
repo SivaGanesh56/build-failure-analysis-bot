@@ -34,7 +34,7 @@ export const functions = {
   },
 };
 
-export const getCompletion = async (messages, retries = 1) => {
+export const getCompletion = async (messages, retries = 2) => {
   retries--;
   if (retries <= 0) return getCMSCompletion(messages);
   const response = await openai.chat.completions.create({
