@@ -2,7 +2,6 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { analyzeErrorLogs } from "./analyzeError.js";
-import { CODE_ERROR_INCORRECT_PARAMS } from "./errors.js";
 
 const app = express();
 
@@ -21,11 +20,9 @@ app.get("/health", (_req, res) => {
 });
 
 app.post("/analyze-error-ai", async (req, res) => {
-  // const { logs } = req.body;
+  const { logs } = req.body;
 
-  // console.log("logs from codebuild:", logs);
-
-  const logs = CODE_ERROR_INCORRECT_PARAMS;
+  console.log("logs:", logs);
 
   console.log(`Error Analysis Started...`);
 
