@@ -32,7 +32,7 @@ export const getCompletion = async (messages, retries = 2) => {
   });
   messages.push({
     role: "user",
-    content: `Recheck all the problems provided with ${response.data} with the code contexts, their surroundings and backtracking and verify there are not any other problems. Finaly give best likely possible options of the error occurances, their locations and solution.
+    content:`Recheck all the problems provided by ${response.choices[0].message} with the code contexts, their surroundings and backtracking to the respective functions calls if required. Verify there are not any other problems. Finaly give best likely possible options of the error occurances, their locations and solution.
      `,
   });
 
