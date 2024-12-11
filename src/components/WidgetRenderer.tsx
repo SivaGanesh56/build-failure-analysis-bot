@@ -15,8 +15,8 @@ export type Widget = {
   id: string;
 };
 
-const WidgetRenderer = ({ widgets }: { widgets?: Widget[] }) => {
-  return widgets?.map((widget) => {
+const WidgetRenderer = ({ widgets }: { widgets: Widget[] }) => {
+  return widgets.map((widget) => {
     const WidgetComponent = WIDGET_MAP[
       widget.contentType
     ] as ComponentType<any>;

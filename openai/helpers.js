@@ -1,28 +1,40 @@
 import { openai } from "./openai.js";
+import { CMS_PROMPT_TEXT, SPACE_ID } from "./constants.js";
+import { DATA, SCHEMA } from "./cms.js";
 import { fetchPageData } from "./lib/contentful/utils.js";
+import { validateDataAgainstSchema } from "./utils.js";
 
 export const functions = {
   cmsErrorHandler: async ({ slug }) => {
-    console.log(slug, "slug");
     const pageData = await fetchPageData({ slug });
 
-    console.log(JSON.stringify(pageData, null, 2));
+    const invalidEntries = validateDataAgainstSchema(pageData, SCHEMA);
 
-    const schema = {};
+    if (!pageData || !invalidEntries) {
+      return `No Data Found with this slug: ${slug} in CMS, might not be CMS Error cross check other errors`;
+    }
 
-    return `
-          Analyze the error logs provided above and
-          compare them with the provided pageData. 
-          Identify missing or broken fields, and construct the respective CMS links.
-          Here is the page data from the cms for this slug: ${slug},
-          pageData: ${JSON.stringify(pageData, null, 2)}
-          Contentful Model Schema: ${JSON.stringify(schema, null, 2)}
-          validate pageData with contentful model schema, if you find issues with pageData 
+    const brokenLinks = invalidEntries.map(
+      (invalidEntry) =>
+        `https://app.contentful.com/spaces/${SPACE_ID}/entries/${
+          invalidEntry.id
+        }?focusedField=${invalidEntry.invalidFields.join(",")}`
+    );
+
+    const output = `
+       invalid entry links from Contentful:
+       ${brokenLinks.join("\n")}
     `;
+
+    return output;
+  },
+  contentfulLinkGenerator: async ({ entryId, ...rest }) => {
+    console.log(entryId, "entryId", rest);
+    return `https://app.contentful.com/spaces/${SPACE_ID}/entries/${entryId}`;
   },
 };
 
-export const getCompletion = async (messages, retries = 2) => {
+export const getCompletion = async (messages, retries = 1) => {
   retries--;
   if (retries <= 0) return getCMSCompletion(messages);
   const response = await openai.chat.completions.create({
@@ -32,8 +44,10 @@ export const getCompletion = async (messages, retries = 2) => {
   });
   messages.push({
     role: "user",
-    content:`Recheck all the problems provided by ${response.choices[0].message} with the code contexts, their surroundings and backtracking to the respective functions calls if required. Verify there are not any other problems. Finaly give best likely possible options of the error occurances, their locations and solution.
-     `,
+    content: `Recheck all the problems provided by ${response.choices[0].message} with the code contexts,
+       their surroundings and backtracking to the respective functions calls if required.
+        Verify there are not any other problems. 
+        Finally give best likely possible options of the error occurrences, their locations and solution`,
   });
 
   return getCompletion(messages, retries);
@@ -53,7 +67,7 @@ export const getCMSCompletion = async (messages) => {
           properties: {
             slug: {
               type: "string",
-              description: "The page path of where the error happened.",
+              description: "The page path where the error happened.",
             },
             fields: {
               type: "array",
@@ -66,6 +80,21 @@ export const getCMSCompletion = async (messages) => {
           required: ["slug"],
         },
       },
+      // {
+      //   name: "contentfulLinkGenerator",
+      //   description:
+      //     "Takes the entry ID of a Contentful entry as input and returns its link",
+      //   parameters: {
+      //     type: "object",
+      //     properties: {
+      //       entryId: {
+      //         type: "string",
+      //         description: "ID of Contentful entry",
+      //       },
+      //     },
+      //     required: ["entryId"],
+      //   },
+      // },
     ],
     temperature: 0,
   });

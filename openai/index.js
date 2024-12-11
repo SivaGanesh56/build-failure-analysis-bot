@@ -22,7 +22,9 @@ app.get("/health", (_req, res) => {
 app.post("/analyze-error-ai", async (req, res) => {
   const { logs } = req.body;
 
-  console.log("logs from codebuild:", logs);
+  console.log("logs:", logs);
+
+  console.log(`Error Analysis Started...`);
 
   setTimeout(async () => {
     await analyzeErrorLogs(logs);
