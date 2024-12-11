@@ -1,24 +1,22 @@
 import { openai } from "./openai.js";
-import { fetchPageData } from "./lib/contentful/utils.js";
+import { CMS_PROMPT_TEXT, SPACE_ID } from "./constants.js";
+import { DATA, SCHEMA } from "./cms.js";
 
 export const functions = {
   cmsErrorHandler: async ({ slug }) => {
     console.log(slug, "slug");
-    const pageData = await fetchPageData({ slug });
-
-    console.log(JSON.stringify(pageData, null, 2));
-
-    const schema = {};
-
     return `
-          Analyze the error logs provided above and
-          compare them with the provided pageData. 
-          Identify missing or broken fields, and construct the respective CMS links.
-          Here is the page data from the cms for this slug: ${slug},
-          pageData: ${JSON.stringify(pageData, null, 2)}
-          Contentful Model Schema: ${JSON.stringify(schema, null, 2)}
-          validate pageData with contentful model schema, if you find issues with pageData 
+    ${CMS_PROMPT_TEXT}
+    
+    Data:
+    ${DATA}
+
+    Schema:
+    ${SCHEMA}
     `;
+  },
+  contentfulLinkGenerator: async ({ entryId }) => {
+    return `https://app.contentful.com/spaces/${SPACE_ID}/entries/${entryId}`;
   },
 };
 
@@ -53,7 +51,7 @@ export const getCMSCompletion = async (messages) => {
           properties: {
             slug: {
               type: "string",
-              description: "The page path of where the error happened.",
+              description: "The page path where the error happened.",
             },
             fields: {
               type: "array",
@@ -61,6 +59,21 @@ export const getCMSCompletion = async (messages) => {
               items: {
                 type: "string",
               },
+            },
+          },
+          required: ["slug"],
+        },
+      },
+      {
+        name: "contentfulLinkGenerator",
+        description:
+          "Takes the entry ID of a Contentful entry as input and returns its link",
+        parameters: {
+          type: "object",
+          properties: {
+            entryId: {
+              type: "string",
+              description: "ID of Contentful entry",
             },
           },
           required: ["slug"],
