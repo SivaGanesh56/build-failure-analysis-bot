@@ -1,7 +1,7 @@
 import { INCORRECT_PARAMTER_ERROR } from "./errors.js";
 import { ASSISTANT_PROMPT_TEXT } from "./constants.js";
 import { loadStore } from "./loadStore.js";
-import { getCompletion } from "./helpers.js";
+import { functions, getCompletion } from "./helpers.js";
 // import { sendNotificationToTeams } from "./sendNotificationToTeams.js";
 
 const errorLogs = INCORRECT_PARAMTER_ERROR;
