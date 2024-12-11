@@ -1,26 +1,40 @@
 import { openai } from "./openai.js";
 import { CMS_PROMPT_TEXT, SPACE_ID } from "./constants.js";
 import { DATA, SCHEMA } from "./cms.js";
+import { fetchPageData } from "./lib/contentful/utils.js";
+import { validateDataAgainstSchema } from "./utils.js";
 
 export const functions = {
   cmsErrorHandler: async ({ slug }) => {
-    console.log(slug, "slug");
-    return `
-    ${CMS_PROMPT_TEXT}
-    
-    Data:
-    ${DATA}
+    const pageData = await fetchPageData({ slug });
 
-    Schema:
-    ${SCHEMA}
+    const invalidEntries = validateDataAgainstSchema(pageData, SCHEMA);
+
+    if (!pageData || !invalidEntries) {
+      return `No Data Found with this slug: ${slug} in CMS, might not be CMS Error cross check other errors`;
+    }
+
+    const brokenLinks = invalidEntries.map(
+      (invalidEntry) =>
+        `https://app.contentful.com/spaces/${SPACE_ID}/entries/${
+          invalidEntry.id
+        }?focusedField=${invalidEntry.invalidFields.join(",")}`
+    );
+
+    const output = `
+       invalid entry links from Contentful:
+       ${brokenLinks.join("\n")}
     `;
+
+    return output;
   },
-  contentfulLinkGenerator: async ({ entryId }) => {
+  contentfulLinkGenerator: async ({ entryId, ...rest }) => {
+    console.log(entryId, "entryId", rest);
     return `https://app.contentful.com/spaces/${SPACE_ID}/entries/${entryId}`;
   },
 };
 
-export const getCompletion = async (messages, retries = 2) => {
+export const getCompletion = async (messages, retries = 1) => {
   retries--;
   if (retries <= 0) return getCMSCompletion(messages);
   const response = await openai.chat.completions.create({
@@ -66,21 +80,21 @@ export const getCMSCompletion = async (messages) => {
           required: ["slug"],
         },
       },
-      {
-        name: "contentfulLinkGenerator",
-        description:
-          "Takes the entry ID of a Contentful entry as input and returns its link",
-        parameters: {
-          type: "object",
-          properties: {
-            entryId: {
-              type: "string",
-              description: "ID of Contentful entry",
-            },
-          },
-          required: ["slug"],
-        },
-      },
+      // {
+      //   name: "contentfulLinkGenerator",
+      //   description:
+      //     "Takes the entry ID of a Contentful entry as input and returns its link",
+      //   parameters: {
+      //     type: "object",
+      //     properties: {
+      //       entryId: {
+      //         type: "string",
+      //         description: "ID of Contentful entry",
+      //       },
+      //     },
+      //     required: ["entryId"],
+      //   },
+      // },
     ],
     temperature: 0,
   });

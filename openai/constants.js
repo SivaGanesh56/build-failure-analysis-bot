@@ -33,7 +33,6 @@ If data is not valid, classify the error as CMS error.
       - The \`fields\`: The details of missing or broken fields in the CMS. Figure out yourself.
 
       The function will return the entry id of the invalid entry in its data, 
-      explicitly invoke the \`contentfulLinkGenerator\` function with the entry Id and include the link received in the Error Description section of your response.
 
       Do not provide plain-text examples for function invocation;
       always use the function_call response to trigger the function in the system.
@@ -60,10 +59,32 @@ You will receive an error log to analyze. Determine the root cause, categorize t
 `;
 
 export const CMS_PROMPT_TEXT = `
-You are a Contentful Data Validator. You will be given the data for an entry and its content model schema, which contains the validations for each field. Validate the data with respect to the schema and suggest if there are any validation errors.
+You are a Contentful Data Validator. You will be given the data for an entry and its content model schema, which contains the validations for each field. Validate the data against the schema and identify any validation errors.
 
-If the entry is valid, respond with "null"
-Else respond with "{<ENTRY_ID_1>: [<FIELD_1>, <FIELD_2>, ...], <ENTRY_ID_2>: [<FIELD_1>, <FIELD_2>, ...]}"
-where <ENTRY_ID_*> is the id of the invalid entries present in the data and
-<FIELD_*> is the invalid field present in each respective entries.
+### Response Format:
+If the entry is valid, respond with \`null\`.
+If there are validation errors, respond with a structured array in the following format:
+\`\`\`json
+[
+  {
+    "id": "<entry_id>",
+    "fields": ["<list_of_invalid_fields>"]
+  },
+  ...
+]
+\`\`\`
+
+### Additional Instructions:
+- Use the function_call response to explicitly invoke the \`cmsErrorHandler\` function.
+- Populate the \`fields\` array with the specific fields in the entry that failed validation.
+- Each object in the array should correspond to a single invalid entry and must include:
+  - \`id\`: The ID of the entry with validation errors.
+  - \`fields\`: An array of field names that failed validation.
+
+### Output Rules:
+1. Do not include additional explanations or plain-text responses.
+2. If the validation is successful, respond with \`null\`.
+3. If the validation fails, ensure the response is structured as described above.
+
+Start validating the provided data and schema immediately.
 `;

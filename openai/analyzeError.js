@@ -51,7 +51,9 @@ export const analyzeErrorLogs = async (errorLogs) => {
       const functionToCall = functions[fnName];
       const params = JSON.parse(args);
 
-      const result = functionToCall(params);
+      const result = await functionToCall(params);
+
+      console.log(result);
 
       messages.push({
         role: "assistant",
@@ -65,7 +67,7 @@ export const analyzeErrorLogs = async (errorLogs) => {
       messages.push({
         role: "function",
         name: fnName,
-        content: JSON.stringify({ result: result }),
+        content: JSON.stringify(result),
       });
     }
   }
