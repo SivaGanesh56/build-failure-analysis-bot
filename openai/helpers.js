@@ -55,3 +55,29 @@ export const getCompletion = async (messages) => {
 
   return response;
 };
+
+export const extractErrorLogs = async (logs) => {
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4-turbo",
+      messages: [
+        {
+          role: "system",
+          content:
+            "You are an AI assistant specialized in extracting error logs from CodeBuild logs. just extract errorlogs only where error occurred.",
+        },
+        {
+          role: "user",
+          content: `Here are the logs: ${logs}`,
+        },
+      ],
+      temperature: 0,
+    });
+
+    const extractedMessage = response?.choices?.[0]?.message?.content;
+
+    return extractedMessage;
+  } catch (error) {
+    console.error("Error while extracting logs:", error);
+  }
+};

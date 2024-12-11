@@ -1,77 +1,36 @@
-import { INCORRECT_PARAMTER_ERROR } from "./errors.js";
-import { ASSISTANT_PROMPT_TEXT } from "./constants.js";
-import { loadStore } from "./loadStore.js";
-import { functions, getCompletion } from "./helpers.js";
-// import { sendNotificationToTeams } from "./sendNotificationToTeams.js";
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { analyzeErrorLogs } from "./analyzeError.js";
+// import { INFRA_ERROR_OUT_OF_MEMORY } from "./errors.js";
 
-const errorLogs = INCORRECT_PARAMTER_ERROR;
+const app = express();
 
-const query = async () => {
-  const store = await loadStore();
+app.use(cors());
 
-  // const results = await store.similaritySearch(errorLogs, 2);
+app.use(bodyParser.json());
 
-  const results = store.memoryVectors.map((item) => ({
-    pageContent: item.content,
-    metadata: item.metadata,
-  }));
+const PORT = "8181";
 
-  const messages = [
-    {
-      role: "assistant",
-      content: `
-        ${ASSISTANT_PROMPT_TEXT}
-        Code Context: ${results.map((r) => r.pageContent).join("\n")}
-      `,
-    },
-    {
-      role: "user",
-      content: `Here is the error log\n logs: ${errorLogs}`,
-    },
-  ];
+app.listen(PORT, () => {
+  console.log(`Server Listening on Port: ${PORT}`);
+});
 
-  let response;
+app.get("/health", (_req, res) => {
+  res.json({ message: "Server Running Healthy :)" });
+});
 
-  while (true) {
-    response = await getCompletion(messages);
+app.post("/analyze-error-ai", async (req, res) => {
+  const { logs } = req.body;
 
-    if (response.choices[0].finish_reason === "stop") {
-      const content = `${
-        response.choices[0].message.content
-      }\n\nSources: ${results.map((r) => r.metadata.source).join(", ")}\n\n`;
+  console.log("logs from codebuild:", logs);
 
-      console.log(content);
+  setTimeout(async () => {
+    await analyzeErrorLogs(logs);
+  }, 0);
 
-      // await sendNotificationToTeams(content);
-
-      break;
-    } else if (response.choices[0].finish_reason === "function_call") {
-      const fnName = response.choices[0].message.function_call.name;
-      const args = response.choices[0].message.function_call.arguments;
-
-      console.log(fnName, "fnName", args, "args");
-
-      const functionToCall = functions[fnName];
-      const params = JSON.parse(args);
-
-      const result = functionToCall(params);
-
-      messages.push({
-        role: "assistant",
-        content: null,
-        function_call: {
-          name: fnName,
-          arguments: args,
-        },
-      });
-
-      messages.push({
-        role: "function",
-        name: fnName,
-        content: JSON.stringify({ result: result }),
-      });
-    }
-  }
-};
-
-query();
+  return res.json({
+    message:
+      "Your error logs are being analyzed. You will receive a notification in the Teams channel once the analysis is complete.",
+  });
+});
