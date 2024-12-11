@@ -55,7 +55,6 @@ Use the following outline to format your response:
 - Steps to Fix
 
 
-
 Your Task:
 You will receive an error log to analyze. Determine the root cause, categorize the error, and provide actionable insights or invoke the appropriate error handler function as necessary.
 `;
