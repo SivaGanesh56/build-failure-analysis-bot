@@ -3,7 +3,7 @@ import { OpenAIEmbeddings } from "@langchain/openai";
 
 import { GithubRepoLoader } from "@langchain/community/document_loaders/web/github";
 
-const GITHUB_URL = process.env.GITHUB_URL;
+const GITHUB_URL = "https://github.com/Gaurav-Dash/basic-nextjs-app";
 
 const docsFromGithub = () => {
   const loader = new GithubRepoLoader(GITHUB_URL, {
