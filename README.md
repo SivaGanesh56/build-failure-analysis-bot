@@ -1,36 +1,50 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Basic Next.js App with OpenAI Integration
 
-## Getting Started
+This repository combines a static site generator built with Next.js and an OpenAI-based system for error log analysis and notifications. Follow the instructions below to set up the project.
 
-First, run the development server:
+---
+
+## Folder Structure
+
+### `OpenAi/`
+
+- **Purpose**: Implements OpenAI model integrations.
+- **Functionality**:
+  - Reads and analyzes error logs.
+  - Utilizes OpenAI for issue diagnosis.
+  - Sends notifications to a team communication platform, such as Microsoft Teams.
+
+### `src/`
+
+- **Purpose**: Next.js project for creating static sites.
+- **Functionality**:
+  - Fetches content from a CMS.
+  - Dynamically generates static pages.
+
+---
+
+## Prerequisites
+
+- Node.js (v16 or later) installed.
+- OpenAI API Key for `OpenAi/`.
+- Environment variables for CMS integration in `src/`.
+
+---
+
+## Setup Instructions
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/Gaurav-Dash/basic-nextjs-app.git
+cd basic-nextjs-app
+npm i / yarn
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## scripts
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Service Script
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- The `service` script uses **nodemon** to start an Express server from `openai/index.js`, listening on **port 8181**. It is used basically to receive error logs from AWS, process those logs and send a notification in teams channel.
 
-## Learn More
+### dev Script
 
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- The `dev` script is used for running the development Next.js app. http://localhost:3000
